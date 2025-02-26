@@ -1,0 +1,88 @@
+def calculate_medi_score(air_or_oxygen, consciousness, respiration_rate, spo2, temperature):
+    """
+    Calculate the Medi Score for a patient based on their physiological measurements.
+    
+    Parameters:
+        air_or_oxygen (int): 0 if air, 2 if on oxygen
+        consciousness (int): 0 if alert, non-zero if CVPU
+        respiration_rate (int): Number of breaths per minute
+        spo2 (int): Blood oxygen saturation percentage
+        temperature (float): Body temperature in Celsius (rounded to 1 decimal place)
+
+    Returns:
+        int: The calculated Medi Score
+    """
+    # Ensure temperature is rounded to one decimal place
+    temperature = round(temperature, 1)
+    
+    # Air or oxygen scoring
+    oxygen_score = 2 if air_or_oxygen == 2 else 0
+    
+    # Consciousness scoring
+    consciousness_score = 3 if consciousness != 0 else 0
+    
+    # Respiration rate scoring
+    if respiration_rate <= 8:
+        respiration_score = 3
+    elif 9 <= respiration_rate <= 11:
+        respiration_score = 2
+    elif 12 <= respiration_rate <= 20:
+        respiration_score = 0
+    elif 21 <= respiration_rate <= 24:
+        respiration_score = 1
+    else:
+        respiration_score = 3
+    
+    # SpO2 scoring based on whether the patient is on air or oxygen
+    if spo2 <= 83:
+        spo2_score = 3
+    elif 84 <= spo2 <= 85:
+        spo2_score = 2
+    elif 86 <= spo2 <= 87:
+        spo2_score = 1
+    elif 88 <= spo2 <= 92 or (spo2 >= 93 and air_or_oxygen == 0):
+        spo2_score = 0
+    elif spo2 in [93, 94, 95, 96]:
+        spo2_score = 2 if air_or_oxygen == 2 else 0
+    else:  # SpO2 >= 97 on oxygen
+        spo2_score = 3 if air_or_oxygen == 2 else 0
+    
+    # Temperature scoring
+    if temperature <= 35.0:
+        temperature_score = 3
+    elif 35.1 <= temperature <= 36.0:
+        temperature_score = 2
+    elif 36.1 <= temperature <= 38.0:
+        temperature_score = 0
+    elif 38.1 <= temperature <= 39.0:
+        temperature_score = 1
+    else:
+        temperature_score = 3
+    
+    # Calculate total Medi Score
+    total_score = (oxygen_score + consciousness_score + respiration_score +
+                   spo2_score + temperature_score)
+    
+    # Display output in a structured format
+    print("\nPatient's Medi Score Calculation:")
+    print(f"{'Property':<20}{'Observation':<15}{'Score':<10}{'Comment'}")
+    print("-" * 60)
+    print(f"{'Air or oxygen?':<20}{air_or_oxygen:<15}{oxygen_score:<10}{'On oxygen' if air_or_oxygen == 2 else 'Breathing air'}")
+    print(f"{'Consciousness':<20}{consciousness:<15}{consciousness_score:<10}{'Alert' if consciousness == 0 else 'CVPU'}")
+    print(f"{'Respiration rate':<20}{respiration_rate:<15}{respiration_score:<10}")
+    print(f"{'SpO2':<20}{spo2:<15}{spo2_score:<10}")
+    print(f"{'Temperature':<20}{temperature:<15}{temperature_score:<10}")
+    print("-" * 60)
+    print(f"{'Final Medi Score:':<20}{total_score}")
+    
+    return total_score
+
+# Example Usage
+test_cases = [
+    (0, 0, 15, 95, 37.1),  # Expected Score: 0
+    (2, 0, 17, 95, 37.1),  # Expected Score: 4
+    (2, 1, 23, 88, 38.5)   # Expected Score: 8
+]
+
+for case in test_cases:
+    calculate_medi_score(*case)
