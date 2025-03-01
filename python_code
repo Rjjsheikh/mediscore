@@ -1,76 +1,85 @@
 class MediScoreCalculator:
-    def __init__(self, oxygen, consciousness, respiration_rate, spo2, temperature):
-        self.oxygen = oxygen
-        self.consciousness = consciousness
-        self.respiration_rate = respiration_rate
-        self.spo2 = spo2
-        self.temperature = round(temperature, 1)  # Round to 1 decimal place as per requirements
+    # Constructor to initialize patient details
+    def __init__(data, oxygen, consciousness, respiration_rate, spo2, temperature):
+        data.oxygen = oxygen  # Store oxygen support level
+        data.consciousness = consciousness  # Store consciousness level
+        data.respiration_rate = respiration_rate  # Store respiration rate
+        data.spo2 = spo2  # Ensure SpO2 does not exceed 100
+        data.temperature = round(temperature, 1)  # Round temperature to 1 decimal place
 
-    def calculate_score(self):
-        score = 0
-
-        # Oxygen dependency
-        score += self.oxygen  # 0 for air, 2 for oxygen
-
-        # Consciousness level
-        if self.consciousness != 0:
-            score += 3  # Non-zero means CVPU (confused, voice, pain, unresponsive)
-
-        # Respiration rate scoring
-        if self.respiration_rate <= 8:
+    # Function to calculate the Medi Score based on patient conditions
+    def calculate_score(data):
+        score = 0  # Initialize score to zero
+        score += data.oxygen  # Add oxygen score based on patient support
+        
+        if data.consciousness != 0:
+            score += 3  # Consciousness issue adds 3 points
+        
+        # Calculate respiration rate score based on thresholds
+        if data.respiration_rate <= 8:
             score += 3
-        elif 9 <= self.respiration_rate <= 11:
+        elif data.respiration_rate <= 11:
             score += 1
-        elif 21 <= self.respiration_rate <= 24:
+        elif data.respiration_rate <= 24:
             score += 2
-        elif self.respiration_rate >= 25:
+        else:
             score += 3
-
-        # SpO2 scoring
-        if self.spo2 <= 83:
+        
+        # Calculate SpO2 (oxygen saturation) score based on severity
+        if data.spo2 <= 83:
             score += 3
-        elif 84 <= self.spo2 <= 85:
+        elif data.spo2 <= 85:
             score += 2
-        elif 86 <= self.spo2 <= 87:
+        elif data.spo2 <= 87:
             score += 1
-        elif self.oxygen == 2:
-            if 93 <= self.spo2 <= 94:
-                score += 1
-            elif 95 <= self.spo2 <= 96:
-                score += 2
-            elif self.spo2 >= 97:
-                score += 3
-
-        # Temperature scoring
-        if self.temperature <= 35.0:
+        
+        # Calculate temperature score with appropriate thresholds
+        if data.temperature <= 35.0:
             score += 3
-        elif 35.1 <= self.temperature <= 36.0:
+        elif data.temperature <= 36.0:
             score += 1
-        elif 38.1 <= self.temperature <= 39.0:
+        elif data.temperature <= 39.0:
             score += 1
-        elif self.temperature >= 39.1:
+        else:
             score += 2
+        
+        return score  # Return final Medi Score
 
-        return score
+# Function to validate and get user input with error handling
+def validate_input(prompt, value_type, valid_values=None, max_value=None):
+    while True:
+        try:
+            value = value_type(input(prompt))  # Get user input and convert to required type
+            if valid_values is not None and value not in valid_values:
+                print("Invalid input, try again.")  # Notify user of invalid input
+                continue
+            if max_value is not None and value > max_value:
+                print(f"Value cannot be greater than {max_value}. Please enter again.")  # Ensure SpO2 does not exceed 100
+                continue
+            return value  # Return valid input
+        except ValueError:
+            print("Invalid input, enter a valid number.")  # Handle incorrect input format
 
-# User input section
-patients = []
-n = int(input("Enter the number of patients: "))
+patients = []  # List to store patient details
+n = validate_input("Enter the number of patients: ", int)  # Ask user for number of patients
 
+# Loop through each patient to collect their data
 for i in range(n):
     print(f"\nEnter details for patient {i + 1}:")
-    oxygen = int(input("Is the patient on oxygen? (0 for air, 2 for oxygen): "))
-    consciousness = int(input("Enter consciousness level (0 for alert, non-zero for CVPU): "))
-    respiration_rate = int(input("Enter respiration rate (per minute): "))
-    spo2 = int(input("Enter SpO2 (oxygen saturation percentage): "))
-    temperature = float(input("Enter temperature (in Celsius): "))
+    oxygen = validate_input("Is the patient on oxygen? (0 for air, 2 for oxygen): ", int, [0, 2])
+    consciousness = validate_input("Enter consciousness level (0 for alert, non-zero for CVPU): ", int)
+    respiration_rate = validate_input("Enter respiration rate (per minute): ", int)
+    spo2 = validate_input("Enter SpO2 (oxygen saturation percentage, max 100): ", int, max_value=100)  # Validate SpO2 range
+    temperature = validate_input("Enter temperature (in Celsius): ", float)
     
+    # Create a patient object and store it in the list
     patient = MediScoreCalculator(oxygen, consciousness, respiration_rate, spo2, temperature)
     patients.append(patient)
 
-# Displaying results
 print("\nPatient Medi Scores:")
-for i, patient in enumerate(patients):
+# Loop through each patient and calculate their score
+for i, patient in enumerate(patients):  # enumerate() helps track index of patient
     score = patient.calculate_score()
-    print(f"Patient {i + 1}: Medi Score = {score}")
+    print(f"\nPatient {i + 1}: Medi Score: {score}")
+
 
