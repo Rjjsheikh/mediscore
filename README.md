@@ -1,59 +1,27 @@
-Introduction
+1.	Introduction 
+The document presents an extensive description of the Medi Score Calculator including its engineering strategy alongside technical choices and development implementation methods. The Medi Score functions as an effortless rule-based assessment solution which determines illness intensity through medical observation results. 
+A scalable and efficient solution was created to deliver straightforward use for healthcare workers alongside robust performance and precise accuracy. The system follows object-oriented programming (OOP) with structured error-handling among other features to deliver these objectives.
+2.	Development Approach
+A structured engineering approach allowed the development of the program for efficiency and maintainability purposes. The key steps include:
+2.1	Object-Oriented Programming (OOP) Approach:
+•	Encapsulation: All patient-specific data together with calculations have been contained within the MediScoreCalculator class.
+•	Modularity: Through its usage of a class structure the code maintains flexibility and so any modifications won't alter other program sections.
+•	Reusability: The program design treats patients independently as objects which permits processing numerous patients through a scalable framework.
 
-This project is a solution for calculating the Medi Score, a simple rule-based scoring system used to assess the severity of a patient’s condition. The goal is to implement a robust, maintainable, and scalable solution while demonstrating best coding practices and problem-solving skills.
+2.2	Input Validation and Error Handling
+To ensure data integrity and robustness, a dedicated function validate_input was implemented to:
+•	Restrict input to valid ranges in the case of SPO2% which should not exceed the limit of 100
+•	Handle invalid data types (ensuring numeric input for breathing rate, temperature, etc.).
+•	Displaying easy-to-use error messages in case of inappropriate input.
 
-Thought Process & Problem-Solving Approach
+2.3	Scoring Logic Implementation:
+The scoring system follows a well-defined conditional structure, ensuring that each observation is accurately categorized and scored. The approach involves:
+•	Utilizing a hierarchical if-else structure for each parameter.
+•	Preventing redundant checks through efficient condition structure.
+•	Computing the final score in a single pass to ensure efficiency.
 
-1. Understanding the Problem
 
-Analyzed the problem statement to extract key components and constraints.
+The Medi Score Calculator was developed using a systematic and disciplined engineering methodology, guaranteeing that the final product was precise, effective, and scalable. A specific class, MediScoreCalculator, was developed to encapsulate patient data and scoring logic, encouraging modularity and reusability. The solution was constructed using object-oriented programming (OOP) concepts. By avoiding incorrect entries and guaranteeing the accuracy of the data gathered, a strong input validation system was put in place to improve user engagement using the validate_input function. In order to ensure that each parameter was evaluated with the least amount of computing cost and with accuracy and clarity, the scoring logic was meticulously organized using hierarchical conditional statements. Edge situations, such as making sure SpO₂ levels did not surpass 100% and accurately distinguishing oxygen dependency in the final score computation, were also carefully handled. Clear variable names, organized output formatting, and a methodical control flow were used to further improve the program for readability and maintainability, guaranteeing that any future additions or alterations could be easily included. Error handling was included to improve robustness by preventing software crashes and provide user-friendly instructions. The output, which included the Medi Score and thorough descriptions of the underlying elements, was organized for clinical interpretation. A strong engineering mentality guided the whole development process, striking a balance between accuracy, usability, and performance to make the solution workable for actual healthcare applications.
 
-Identified the parameters required for scoring: Air/Oxygen usage, Consciousness, Respiration Rate, SpO2, and Temperature.
-
-Defined a structured approach to map inputs to scores based on predefined rules.
-
-2. Planning the Solution
-
-Break Down the Logic: Segmented the scoring system into separate components.
-
-Edge Case Handling: Considered potential invalid inputs, rounding rules, and numerical range validation.
-
-Code Maintainability: Ensured modularity, clear documentation, and structured output formatting.
-
-3. Implementation Strategy
-
-Define a Function: Implemented a function to compute the Medi Score based on provided patient data.
-
-Conditional Logic for Scoring: Used well-structured if-elif-else conditions to determine scores.
-
-Formatted Output: Displayed the score breakdown in a structured tabular format for readability.
-
-Error Handling: Implemented validation to ensure input correctness.
-
-4. Testing and Refinement
-
-Manual Testing: Checked various inputs to verify expected scores.
-
-Code Readability: Used meaningful variable names and structured comments.
-
-Future-Proofing: Designed the function to be adaptable for future modifications or integrations.
-
-Code Highlights & Best Practices
-
-Modular and Readable: Clear separation of logic for different parameters.
-
-Scalability: The function can be extended to accommodate new parameters or changes.
-
-Production-Ready Design: Well-documented and structured output for clarity.
-
-Performance Considerations: Efficient conditional checks to avoid unnecessary computations.
-
-Future Enhancements
-
-Automated Testing: Implement unit tests to verify correctness across multiple test cases.
-
-Logging Mechanism: Implement logging for debugging and tracking patient score trends.
-
-Summary
-
-This project demonstrates a strong engineering mindset by emphasizing structured problem-solving, maintainability, and scalability. The solution is designed to be clear, efficient, and adaptable, making it an ideal implementation for a junior developer assessment.
+3.	Conclusion 
+Medi Score Calculator is designed as a strong, reliable, and scalable tool to evaluate patient cases in terms of predefined medical criteria. Using object-oriented programming, sound input validation, and optimized scoring algorithms, the program assures real-time reliable and accurate calculations while remaining user-friendly for healthcare professionals. It is made quite efficient, with a reduction of computational load through logical organization of conditionals and elimination of redundant checks. Further, special attention has been given over and above the standard error handling and user interaction, making sure that invalid inputs do not bother the running of the program. The design is hugely scalable so that a new physiological parameter can easily be added, or its scoring criterion can be adjusted with shifts in the changing medical parameters. Overall, this project is an excellent engineering approach, blending precision, usability, and performance to walk the visionary talk of a dramatic tool for clinical decision-making.
