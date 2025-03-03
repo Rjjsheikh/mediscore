@@ -1,4 +1,4 @@
-1.	Introduction 
+##1.	Introduction## 
 The document presents an extensive description of the Medi Score Calculator including its engineering strategy alongside technical choices and development implementation methods. The Medi Score functions as an effortless rule-based assessment solution which determines illness intensity through medical observation results. 
 A scalable and efficient solution was created to deliver straightforward use for healthcare workers alongside robust performance and precise accuracy. The system follows object-oriented programming (OOP) with structured error-handling among other features to deliver these objectives.
 2.	Development Approach
