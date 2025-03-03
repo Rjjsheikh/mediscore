@@ -5,7 +5,7 @@ This document provides a detailed explanation of the **Medi Score Calculator**, 
 
 A **scalable and efficient** solution was implemented to ensure **accuracy and usability** for healthcare professionals. The system follows **object-oriented programming (OOP)** principles, incorporating **structured error handling** and **robust validation techniques**.
 
----
+
 
 ## **2. Development Approach**  
 A **structured engineering approach** was followed to ensure **efficiency and maintainability**. The key components include:  
@@ -41,7 +41,7 @@ The **Medi Score Calculator** was developed using a **disciplined engineering ap
 
 The **entire development process** was guided by a **strong engineering mindset**, balancing **accuracy, usability, and performance** to ensure real-world applicability in healthcare settings.
 
----
+
 
 ## **3. Conclusion**  
 The **Medi Score Calculator** is designed as a **reliable, efficient, and scalable** tool for assessing **patient conditions** based on **predefined medical criteria**.  
