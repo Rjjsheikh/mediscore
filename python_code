@@ -1,85 +1,130 @@
 class MediScoreCalculator:
-    # Constructor to initialize patient details
-    def __init__(data, oxygen, consciousness, respiration_rate, spo2, temperature):
-        data.oxygen = oxygen  # Store oxygen support level
-        data.consciousness = consciousness  # Store consciousness level
-        data.respiration_rate = respiration_rate  # Store respiration rate
-        data.spo2 = spo2  # Ensure SpO2 does not exceed 100
-        data.temperature = round(temperature, 1)  # Round temperature to 1 decimal place
+    def __init__(self, oxygen, consciousness, respiration_rate, spo2, temperature):
+        #Initializing the variables
+        self.oxygen = oxygen  # 0 for air, 2 for oxygen
+        self.consciousness = consciousness  # 0 for Alert, nonzero for CVPU
+        self.respiration_rate = respiration_rate
+        self.spo2 = min(spo2, 100)  # Ensure SpO2 does not exceed 100
+        self.temperature = round(temperature, 1)  # Round to 1 decimal place
 
-    # Function to calculate the Medi Score based on patient conditions
-    def calculate_score(data):
-        score = 0  # Initialize score to zero
-        score += data.oxygen  # Add oxygen score based on patient support
-        
-        if data.consciousness != 0:
-            score += 3  # Consciousness issue adds 3 points
-        
-        # Calculate respiration rate score based on thresholds
-        if data.respiration_rate <= 8:
-            score += 3
-        elif data.respiration_rate <= 11:
-            score += 1
-        elif data.respiration_rate <= 24:
-            score += 2
-        else:
-            score += 3
-        
-        # Calculate SpO2 (oxygen saturation) score based on severity
-        if data.spo2 <= 83:
-            score += 3
-        elif data.spo2 <= 85:
-            score += 2
-        elif data.spo2 <= 87:
-            score += 1
-        
-        # Calculate temperature score with appropriate thresholds
-        if data.temperature <= 35.0:
-            score += 3
-        elif data.temperature <= 36.0:
-            score += 1
-        elif data.temperature <= 39.0:
-            score += 1
-        else:
-            score += 2
-        
-        return score  # Return final Medi Score
+    def calculate_score(self):
+        score = 0
 
-# Function to validate and get user input with error handling
-def validate_input(prompt, value_type, valid_values=None, max_value=None):
+        # Oxygen Score
+        if self.oxygen == 2:
+            score += 2  # Oxygen use gives a fixed score of 2
+
+        # Consciousness Score
+        if self.consciousness != 0:  # If any nonzero value (CVPU)
+            score += 3
+
+        # Respiration Rate Score
+        if self.respiration_rate <= 8:
+            score += 3
+        elif 9 <= self.respiration_rate <= 11:
+            score += 1
+        elif 12 <= self.respiration_rate <= 20:
+            score += 0
+        elif 21 <= self.respiration_rate <= 24:
+            score += 2
+        else:  # ≥25
+            score += 3
+
+        # SpO₂ Score
+        if self.spo2 <= 83:
+            score += 3
+        elif 84 <= self.spo2 <= 85:
+            score += 2
+        elif 86 <= self.spo2 <= 87:
+            score += 1
+        elif 88 <= self.spo2 <= 92 or (self.spo2 >= 93 and self.oxygen == 0):
+            score += 0
+        elif 93 <= self.spo2 <= 94 and self.oxygen == 2:
+            score += 1
+        elif 95 <= self.spo2 <= 96 and self.oxygen == 2:
+            score += 2
+        elif self.spo2 >= 97 and self.oxygen == 2:
+            score += 3
+
+        # Temperature Score
+        if self.temperature <= 35.0:
+            score += 3
+        elif 35.1 <= self.temperature <= 36.0:
+            score += 1
+        elif 36.1 <= self.temperature <= 38.0:
+            score += 0
+        elif 38.1 <= self.temperature <= 39.0:
+            score += 1
+        else:  # ≥39.1
+            score += 2
+
+        return score
+
+# Function to validate the user input
+def validate_input(prompt, value_type, valid_values=None, max_value=None, non_zero=False):
     while True:
         try:
-            value = value_type(input(prompt))  # Get user input and convert to required type
+            value = value_type(input(prompt))
+
             if valid_values is not None and value not in valid_values:
-                print("Invalid input, try again.")  # Notify user of invalid input
+                print("Invalid input, try again.")
                 continue
+
             if max_value is not None and value > max_value:
-                print(f"Value cannot be greater than {max_value}. Please enter again.")  # Ensure SpO2 does not exceed 100
+                print(f"Value cannot be greater than {max_value}. Please enter again.")
                 continue
-            return value  # Return valid input
+
+            if non_zero and value == 0:
+                print("Value cannot be zero. Please enter a nonzero number.")
+                continue
+
+            return value
         except ValueError:
-            print("Invalid input, enter a valid number.")  # Handle incorrect input format
+            print("Invalid input, enter a valid number.")
 
-patients = []  # List to store patient details
-n = validate_input("Enter the number of patients: ", int)  # Ask user for number of patients
 
-# Loop through each patient to collect their data
-for i in range(n):
+num_patients = validate_input("Enter the number of patients: ", int, non_zero=True)
+
+patients = []
+for i in range(num_patients): #Asking for user input
     print(f"\nEnter details for patient {i + 1}:")
-    oxygen = validate_input("Is the patient on oxygen? (0 for air, 2 for oxygen): ", int, [0, 2])
-    consciousness = validate_input("Enter consciousness level (0 for alert, non-zero for CVPU): ", int)
+    oxygen = validate_input("Is the patient on oxygen? (0 for air, 2 for oxygen): ", int, valid_values=[0, 2])
+    consciousness = validate_input("Enter consciousness level (0 for alert, any nonzero number for CVPU): ", int)
     respiration_rate = validate_input("Enter respiration rate (per minute): ", int)
-    spo2 = validate_input("Enter SpO2 (oxygen saturation percentage, max 100): ", int, max_value=100)  # Validate SpO2 range
+    spo2 = validate_input("Enter SpO2 (oxygen saturation percentage, max 100): ", int, max_value=100)
     temperature = validate_input("Enter temperature (in Celsius): ", float)
-    
-    # Create a patient object and store it in the list
+
+    #Create a MediScoreCalculator object for each patient with the provided data
     patient = MediScoreCalculator(oxygen, consciousness, respiration_rate, spo2, temperature)
     patients.append(patient)
 
 print("\nPatient Medi Scores:")
-# Loop through each patient and calculate their score
-for i, patient in enumerate(patients):  # enumerate() helps track index of patient
+for i, patient in enumerate(patients):  # Loop through patients with index (i)
     score = patient.calculate_score()
-    print(f"\nPatient {i + 1}: Medi Score: {score}")
+    print(f"\nPatient {i + 1}")
+    #Adjusting Headers for the output
+    print(f"{'Property':<20} {'Observation':<15} {'Score':<5} {'Comment'}")
 
+    #Air or Oxygen: checking if the patient is on air or oxygen
+    oxygen_comment = "Breathing air normally." if patient.oxygen == 0 else "Using supplementary oxygen."
+    print(f"{'Air or oxygen?':<20} {patient.oxygen:<15} {2 if patient.oxygen == 2 else 0:<5} {oxygen_comment}")
+
+    #Consciousness: checking if the patient is conscious or unconscious
+    consciousness_comment = "The patient is conscious." if patient.consciousness == 0 else "The patient is unconscious or confused"
+    print(f"{'Consciousness':<20} {patient.consciousness:<15} {3 if patient.consciousness != 0 else 0:<5} {consciousness_comment}")
+
+    #Respiration Rate: giving the respiration rate and associated score
+    respiration_score = 3 if patient.respiration_rate <= 8 else 2 if 9 <= patient.respiration_rate <= 11 else 0 if 12 <= patient.respiration_rate <= 20 else 2 if 21 <= patient.respiration_rate <= 24 else 3
+    print(f"{'Respiration rate':<20} {patient.respiration_rate:<15} {respiration_score:<5}")
+
+    #SpO2: checking the oxygen saturation level and providing the corresponding score and comments
+    spo2_score = 3 if patient.spo2 <= 83 else 2 if 84 <= patient.spo2 <= 85 else 1 if 86 <= patient.spo2 <= 87 else 0 if 88 <= patient.spo2 <= 92 or (patient.spo2 >= 93 and patient.oxygen == 0) else 1 if 93 <= patient.spo2 <= 94 and patient.oxygen == 2 else 2 if 95 <= patient.spo2 <= 96 and patient.oxygen == 2 else 3
+    spo2_comment = "Low oxygen levels." if spo2_score >= 2 else "Oxygen levels are fine." if spo2_score == 0 else "Slightly reduced oxygen levels."
+    print(f"{'SpO2':<20} {patient.spo2:<15} {spo2_score:<5} {spo2_comment}")
+
+    # Temperature: evaluating the temperature score
+    temp_score = 3 if patient.temperature <= 35.0 else 1 if 35.1 <= patient.temperature <= 36.0 else 0 if 36.1 <= patient.temperature <= 38.0 else 1 if 38.1 <= patient.temperature <= 39.0 else 2
+    print(f"{'Temperature':<20} {patient.temperature:<15} {temp_score:<5}")
+
+    print(f"\nThis patient's final Medi score is {score}.")
 
