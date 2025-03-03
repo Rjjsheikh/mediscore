@@ -46,10 +46,10 @@ The **entire development process** was guided by a **strong engineering mindset*
 ## **3. Conclusion**  
 The **Medi Score Calculator** is designed as a **reliable, efficient, and scalable** tool for assessing **patient conditions** based on **predefined medical criteria**.  
 
- **Object-oriented programming** ensures a structured, modular, and extendable architecture.  
- **Robust input validation** and error handling improve user experience and prevent invalid entries.  
- **Optimized scoring logic** provides **real-time, accurate calculations** with **minimal processing overhead**.  
- **Efficient condition structuring** eliminates redundant checks and improves performance.  
- **Scalability** enables easy **integration of new physiological parameters** or **adjustment of scoring thresholds** as medical guidelines evolve.  
+- **Object-oriented programming** ensures a structured, modular, and extendable architecture.  
+-**Robust input validation** and error handling improve user experience and prevent invalid entries.  
+-**Optimized scoring logic** provides **real-time, accurate calculations** with **minimal processing overhead**.  
+-**Efficient condition structuring** eliminates redundant checks and improves performance.  
+-**Scalability** enables easy **integration of new physiological parameters** or **adjustment of scoring thresholds** as medical guidelines evolve.  
 
 Overall, this project **demonstrates an excellent engineering approach**, combining **precision, usability, and efficiency** to create a **valuable clinical decision-making tool**.  
